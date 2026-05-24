@@ -1,0 +1,265 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+}
+
+/* NAV */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.logo span {
+    color: #00e676;
+}
+
+/* BUTTONS */
+.btn-primary {
+    background: #00e676;
+    color: #0a0a0a;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.85;
+}
+
+/* HERO */
+.hero {
+    padding: 120px 48px;
+    max-width: 700px;
+}
+
+.hero h1 {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #aaaaaa;
+    line-height: 1.7;
+    margin-bottom: 40px;
+}
+
+/* HOW IT WORKS */
+.how {
+    padding: 80px 48px;
+    border-top: 1px solid #1e1e1e;
+}
+
+.how h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 48px;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+.step {
+    background: #111111;
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid #1e1e1e;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: #00e676;
+    color: #0a0a0a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+.step h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.step p {
+    color: #aaaaaa;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* FOOTER */
+footer {
+    padding: 32px 48px;
+    border-top: 1px solid #1e1e1e;
+    color: #555555;
+    font-size: 14px;
+}
+
+/* DASHBOARD */
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    padding: 80px 48px;
+    max-width: 1100px;
+}
+
+.dashboard-left h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: #aaaaaa;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #aaaaaa;
+    font-weight: 500;
+}
+
+.form-group input {
+    background: #111111;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #00e676;
+}
+
+.status-msg {
+    font-size: 14px;
+    color: #00e676;
+    min-height: 20px;
+}
+
+.btn-outline {
+    border: 1px solid #2a2a2a;
+    color: #ffffff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: border 0.2s;
+}
+
+.btn-outline:hover {
+    border-color: #00e676;
+}
+
+/* CARD PREVIEW */
+.card-preview {
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    border-radius: 20px;
+    padding: 32px;
+    width: 100%;
+    aspect-ratio: 1.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 20px 60px rgba(0, 230, 118, 0.1);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.card-logo span {
+    color: #00e676;
+}
+
+.card-type {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    font-style: italic;
+}
+
+.card-number {
+    font-size: 22px;
+    letter-spacing: 4px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.card-bottom {
+    display: flex;
+    gap: 32px;
+}
+
+.card-label {
+    font-size: 10px;
+    color: #aaaaaa;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.card-value {
+    font-size: 14px;
+    font-weight: 600;
+}

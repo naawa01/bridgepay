@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BridgePay — Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --clay:      #C1440E;
+            --gold:      #D4A853;
+            --sand:      #E8D5B0;
+            --bark:      #3D2B1F;
+            --soil:      #6B3F2A;
+            --harmattan: #F5ECD7;
+            --dusk:      #1C1109;
+            --moss:      #4A6741;
+            --cream:     #FAF4E8;
+            --danger:    #E05C3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--dusk);
+            color: var(--sand);
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 56px;
+            border-bottom: 1px solid rgba(212, 168, 83, 0.15);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--sand);
+        }
+
+        .logo span { color: var(--gold); }
+
+        .btn-outline {
+            border: 1px solid rgba(212, 168, 83, 0.3);
+            color: var(--gold);
+            padding: 10px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gold);
+            background: rgba(212, 168, 83, 0.08);
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            padding: 56px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .panel-left h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--harmattan);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: rgba(232, 213, 176, 0.5);
+            font-size: 15px;
+            line-height: 1.65;
+            margin-bottom: 36px;
+        }
+
+        .form { display: flex; flex-direction: column; gap: 20px; }
+
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(232, 213, 176, 0.55);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .form-group input,
+        .form-group select {
+            background: rgba(61, 43, 31, 0.5);
+            border: 1px solid rgba(212, 168, 83, 0.15);
+            border-radius: 8px;
+            padding: 14px 16px;
+            color: var(--harmattan);
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            width: 100%;
+        }
+
+        .form-group input::placeholder { color: rgba(232, 213, 176, 0.25); }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--gold);
+            background: rgba(61, 43, 31, 0.7);
+        }
+
+        .form-group select option { background: var(--bark); }
+
+        .security-section {
+            background: rgba(61, 43, 31, 0.3);
+            border: 1px solid rgba(212, 168, 83, 0.12);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .security-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-section-title::before { content: '🔒'; font-size: 14px; }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-label { display: flex; flex-direction: column; gap: 3px; }
+
+        .toggle-label span {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--sand);
+        }
+
+        .toggle-label small {
+            font-size: 12px;
+            color: rgba(232, 213, 176, 0.4);
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .toggle input { opacity: 0; width: 0; height: 0; }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: rgba(61, 43, 31, 0.8);
+            border: 1px solid rgba(212, 168, 83, 0.2);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: 3px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(232, 213, 176, 0.4);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: rgba(193, 68, 14, 0.3);
+            border-color: var(--clay);
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translate(20px, -50%);
+            background: var(--clay);
+        }
+
+        .btn-primary {
+            background: var(--clay);
+            color: var(--cream);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            font-family: 'DM Sans', sans-serif;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            width: 100%;
+        }
+
+        .btn-primary:hover { background: #A8380A; transform: translateY(-1px); }
+        .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+        .status-msg {
+            font-size: 14px;
+            color: var(--gold);
+            min-height: 18px;
+            line-height: 1.6;
+        }
+
+        .status-msg.error { color: var(--danger); }
+
+        .panel-right {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-top: 8px;
+        }
+
+        .card-preview {
+            width: 100%;
+            aspect-ratio: 1.586;
+            background: linear-gradient(135deg, var(--soil) 0%, var(--bark) 60%, #0D0703 100%);
+            border-radius: 18px;
+            padding: 28px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow:
+                0 32px 64px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(212, 168, 83, 0.18),
+                inset 0 1px 0 rgba(212, 168, 83, 0.12);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .card-preview::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 32px; right: 32px;
+            height: 3px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--clay) 0px, var(--clay) 16px,
+                var(--gold) 16px, var(--gold) 32px,
+                var(--moss) 32px, var(--moss) 48px,
+                var(--bark) 48px, var(--bark) 64px
+            );
+            border-radius: 0 0 4px 4px;
+        }
+
+        .card-preview.locked {
+            filter: grayscale(0.6);
+            box-shadow: 0 32px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(224, 92, 58, 0.3);
+        }
+
+        .card-preview.burned {
+            filter: grayscale(1) brightness(0.5);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .card-logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--sand);
+        }
+
+        .card-logo-text span { color: var(--gold); }
+
+        .card-chip {
+            width: 38px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--gold), #B8943D);
+            border-radius: 5px;
+        }
+
+        .card-number {
+            font-size: 20px;
+            letter-spacing: 3px;
+            color: var(--sand);
+            font-weight: 500;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .card-detail { display: flex; flex-direction: column; }
+
+        .card-label {
+            font-size: 9px;
+            color: rgba(232, 213, 176, 0.45);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .card-value {
+            font-size: 13px;
+            color: var(--sand);
+            font-weight: 500;
+        }
+
+        .card-visa {
+            font-size: 22px;
+            font-weight: 800;
+            font-style: italic;
+            color: var(--sand);
+        }
+
+        .card-status-badge {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 100px;
+            width: fit-content;
+        }
+
+        .card-status-badge.active {
+            display: flex;
+            background: rgba(74, 103, 65, 0.2);
+            border: 1px solid rgba(74, 103, 65, 0.4);
+            color: #7DC46F;
+        }
+
+        .card-status-badge.locked {
+            display: flex;
+            background: rgba(224, 92, 58, 0.15);
+            border: 1px solid rgba(224, 92, 58, 0.3);
+            color: var(--danger);
+        }
+
+        .card-status-badge.burned {
+            display: flex;
+            background: rgba(61, 43, 31, 0.5);
+            border: 1px solid rgba(212, 168, 83, 0.1);
+            color: rgba(232, 213, 176, 0.4);
+        }
+
+        .card-details-list {
+            background: rgba(61, 43, 31, 0.4);
+            border: 1px solid rgba(212, 168, 83, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 20px;
+            border-bottom: 1px solid rgba(212, 168, 83, 0.07);
+        }
+
+        .detail-row:last-child { border-bottom: none; }
+
+        .detail-row-label {
+            font-size: 12px;
+            color: rgba(232, 213, 176, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-row-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--harmattan);
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: rgba(212, 168, 83, 0.4);
+            cursor: pointer;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            transition: color 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .copy-btn:hover { color: var(--gold); }
+
+        .card-actions {
+            display: none;
+            gap: 10px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            border: 1px solid;
+            transition: all 0.2s;
+        }
+
+        .btn-lock {
+            background: transparent;
+            border-color: rgba(212, 168, 83, 0.25);
+            color: var(--gold);
+        }
+
+        .btn-lock:hover {
+            background: rgba(212, 168, 83, 0.08);
+            border-color: var(--gold);
+        }
+
+        .btn-burn {
+            background: transparent;
+            border-color: rgba(224, 92, 58, 0.25);
+            color: var(--danger);
+        }
+
+        .btn-burn:hover {
+            background: rgba(224, 92, 58, 0.08);
+            border-color: var(--danger);
+        }
+
+        .btn-generate {
+            background: rgba(61, 43, 31, 0.6);
+            color: var(--gold);
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            border: 1px solid rgba(212, 168, 83, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            display: none;
+        }
+
+        .btn-generate:hover {
+            border-color: var(--gold);
+            background: rgba(61, 43, 31, 0.9);
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Bridge<span>Pay</span></div>
+    <a href="/" class="btn-outline">← Home</a>
+</nav>
+
+<main>
+    <div class="panel-left">
+        <h2>Create your card</h2>
+        <p class="subtitle">Load with MoMo. Get a secure virtual card. Shop anywhere online.</p>
+
+        <div class="form">
+            <div class="form-group">
+                <label>Mobile Money Number</label>
+                <input type="tel" id="phone" placeholder="+233 XX XXX XXXX" />
+            </div>
+
+            <div class="form-group">
+                <label>Amount to Load (GHS)</label>
+                <input type="number" id="amount" placeholder="e.g. 200" min="10" />
+            </div>
+
+            <div class="form-group">
+                <label>Spending Limit (USD)</label>
+                <input type="number" id="spendingLimit" placeholder="Leave blank to use full amount" min="1" />
+            </div>
+
+            <div class="form-group">
+                <label>Card Expiry Window</label>
+                <select id="expiryWindow">
+                    <option value="1h">1 Hour — maximum security</option>
+                    <option value="24h" selected>24 Hours — recommended</option>
+                    <option value="7d">7 Days</option>
+                    <option value="30d">30 Days</option>
+                </select>
+            </div>
+
+            <div class="security-section">
+                <div class="security-section-title">Security Controls</div>
+                <div class="toggle-row">
+                    <div class="toggle-label">
+                        <span>Burn After Use</span>
+                        <small>Card self-destructs after first transaction</small>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="burnAfterUse" />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn-primary" id="payBtn" onclick="initiatePayment()">
+                Request MoMo Payment
+            </button>
+
+            <p id="status-msg" class="status-msg"></p>
+
+            <button class="btn-generate" id="generateBtn" onclick="generateCard()">
+                ✦ Generate My Secure Card
+            </button>
+        </div>
+    </div>
+
+    <div class="panel-right">
+        <div class="card-preview" id="cardPreview">
+            <div class="card-top">
+                <div class="card-logo-text">Bridge<span>Pay</span></div>
+                <div class="card-chip"></div>
+            </div>
+            <div class="card-number" id="cardNumber">•••• •••• •••• ••••</div>
+            <div class="card-bottom">
+                <div class="card-detail">
+                    <div class="card-label">Cardholder</div>
+                    <div class="card-value" id="cardHolder">— — —</div>
+                </div>
+                <div class="card-detail">
+                    <div class="card-label">Expires</div>
+                    <div class="card-value" id="cardExpiry">MM/YYYY</div>
+                </div>
+                <div class="card-detail">
+                    <div class="card-label">CVV</div>
+                    <div class="card-value" id="cardCvv">•••</div>
+                </div>
+                <div class="card-visa">VISA</div>
+            </div>
+        </div>
+
+        <div class="card-status-badge" id="cardStatusBadge">
+            <span id="cardStatusText">Active</span>
+        </div>
+
+        <div class="card-details-list" id="cardDetailsList">
+            <div class="detail-row">
+                <span class="detail-row-label">Card Number</span>
+                <span class="detail-row-value">
+                    <span id="fullCardNumber">—</span>
+                    <button class="copy-btn" onclick="copyText('fullCardNumber')">Copy</button>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row-label">Expiry</span>
+                <span class="detail-row-value" id="fullExpiry">—</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row-label">CVV</span>
+                <span class="detail-row-value">
+                    <span id="fullCvv">—</span>
+                    <button class="copy-btn" onclick="copyText('fullCvv')">Copy</button>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row-label">Spending Limit</span>
+                <span class="detail-row-value" id="fullLimit">—</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row-label">Expires In</span>
+                <span class="detail-row-value" id="fullExpWindow">—</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row-label">Burn After Use</span>
+                <span class="detail-row-value" id="fullBurn">—</span>
+            </div>
+        </div>
+
+        <div class="card-actions" id="cardActions">
+            <button class="btn-action btn-lock" id="lockBtn" onclick="toggleLock()">
+                🔒 Lock Card
+            </button>
+            <button class="btn-action btn-burn" onclick="burnCard()">
+                🔥 Destroy Card
+            </button>
+        </div>
+    </div>
+</main>
+
+<script>
+    const API = "http://127.0.0.1:5000/api";
+    let currentCardId = null;
+    let isLocked = false;
+
+    // ── SAVE & RESTORE STATE ──
+
+    function saveCardState(cardId, masked, cvv) {
+        localStorage.setItem('bp_card_id', cardId);
+        localStorage.setItem('bp_masked', masked);
+        localStorage.setItem('bp_cvv', cvv);
+    }
+
+    function clearCardState() {
+        localStorage.removeItem('bp_card_id');
+        localStorage.removeItem('bp_masked');
+        localStorage.removeItem('bp_cvv');
+    }
+
+    async function restoreCardState() {
+        const cardId = localStorage.getItem('bp_card_id');
+        if (!cardId) return;
+
+        try {
+            const res = await fetch(`${API}/card/${cardId}`);
+            const data = await res.json();
+
+            if (!data.success || data.data.status === 'burned') {
+                clearCardState();
+                return;
+            }
+
+            const card = data.data;
+            currentCardId = cardId;
+            isLocked = card.locked;
+
+            const masked = localStorage.getItem('bp_masked');
+            const cvv = localStorage.getItem('bp_cvv');
+            window._maskedNum = masked;
+            window._cvv = cvv;
+
+            const num = card.card_number;
+            const full = `${num.slice(0,4)} ${num.slice(4,8)} ${num.slice(8,12)} ${num.slice(12,16)}`;
+
+            document.getElementById('cardNumber').textContent = card.locked ? '•••• •••• •••• ••••' : masked;
+            document.getElementById('cardExpiry').textContent = card.expiry;
+            document.getElementById('cardCvv').textContent = card.locked ? '•••' : cvv;
+            document.getElementById('cardHolder').textContent = "BRIDGEPAY USER";
+
+            document.getElementById('fullCardNumber').textContent = full;
+            document.getElementById('fullExpiry').textContent = card.expiry;
+            document.getElementById('fullCvv').textContent = cvv;
+            document.getElementById('fullLimit').textContent = `USD ${card.spending_limit}`;
+            document.getElementById('fullExpWindow').textContent = formatExpiry(card.expiry_window);
+            document.getElementById('fullBurn').textContent = card.burn_after_use ? "Yes — destroys after first use" : "No";
+
+            document.getElementById('cardDetailsList').style.display = card.locked ? 'none' : 'block';
+            document.getElementById('cardActions').style.display = 'flex';
+
+            if (card.locked) {
+                document.getElementById('lockBtn').textContent = '🔓 Unlock Card';
+            }
+
+            setCardStatus(card.status);
+
+        } catch (e) {
+            clearCardState();
+        }
+    }
+
+    // ── PAYMENT ──
+
+    async function initiatePayment() {
+        const phone = document.getElementById('phone').value.trim();
+        const amount = document.getElementById('amount').value;
+        const msg = document.getElementById('status-msg');
+        const payBtn = document.getElementById('payBtn');
+
+        if (!phone || !amount) {
+            msg.className = 'status-msg error';
+            msg.textContent = "Please enter your phone number and amount.";
+            return;
+        }
+
+        msg.className = 'status-msg';
+        msg.textContent = "Sending MoMo prompt to your phone...";
+        payBtn.disabled = true;
+
+        try {
+            const res = await fetch(`${API}/pay`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ phone_number: phone, amount: parseFloat(amount) })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                msg.textContent = "✓ MoMo prompt sent! Approve on your phone, then generate your card.";
+                const genBtn = document.getElementById('generateBtn');
+                genBtn.style.display = "block";
+                genBtn.dataset.userId = phone;
+                genBtn.dataset.amount = amount;
+            } else {
+                msg.className = 'status-msg error';
+                msg.textContent = "Payment request failed. Please try again.";
+                payBtn.disabled = false;
+            }
+        } catch {
+            msg.className = 'status-msg error';
+            msg.textContent = "Could not reach server. Is Flask running?";
+            payBtn.disabled = false;
+        }
+    }
+
+    // ── GENERATE CARD ──
+
+    async function generateCard() {
+        const genBtn = document.getElementById('generateBtn');
+        const msg = document.getElementById('status-msg');
+        const userId = genBtn.dataset.userId;
+        const amount = genBtn.dataset.amount;
+        const spendingLimit = document.getElementById('spendingLimit').value;
+        const expiryWindow = document.getElementById('expiryWindow').value;
+        const burnAfterUse = document.getElementById('burnAfterUse').checked;
+
+        msg.className = 'status-msg';
+        msg.textContent = "Generating your secure card...";
+        genBtn.disabled = true;
+
+        try {
+            const res = await fetch(`${API}/card/create`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    amount: parseFloat(amount),
+                    spending_limit: spendingLimit ? parseFloat(spendingLimit) : null,
+                    expiry_window: expiryWindow,
+                    burn_after_use: burnAfterUse
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                currentCardId = data.card_id;
+                isLocked = false;
+
+                const num = data.card_number;
+                const masked = `${num.slice(0,4)} •••• •••• ${num.slice(12,16)}`;
+                const full = `${num.slice(0,4)} ${num.slice(4,8)} ${num.slice(8,12)} ${num.slice(12,16)}`;
+
+                window._maskedNum = masked;
+                window._cvv = data.cvv;
+                saveCardState(data.card_id, masked, data.cvv);
+
+                document.getElementById('cardNumber').textContent = masked;
+                document.getElementById('cardExpiry').textContent = data.expiry;
+                document.getElementById('cardCvv').textContent = data.cvv;
+                document.getElementById('cardHolder').textContent = "BRIDGEPAY USER";
+
+                document.getElementById('fullCardNumber').textContent = full;
+                document.getElementById('fullExpiry').textContent = data.expiry;
+                document.getElementById('fullCvv').textContent = data.cvv;
+                document.getElementById('fullLimit').textContent = `USD ${data.spending_limit}`;
+                document.getElementById('fullExpWindow').textContent = formatExpiry(data.expiry_window);
+                document.getElementById('fullBurn').textContent = data.burn_after_use ? "Yes — destroys after first use" : "No";
+
+                document.getElementById('cardDetailsList').style.display = 'block';
+                document.getElementById('cardActions').style.display = 'flex';
+                genBtn.style.display = 'none';
+
+                setCardStatus('active');
+                msg.textContent = "✦ Your secure card is ready. Use it anywhere online.";
+            } else {
+                msg.className = 'status-msg error';
+                msg.textContent = "Card generation failed. Please try again.";
+                genBtn.disabled = false;
+            }
+        } catch {
+            msg.className = 'status-msg error';
+            msg.textContent = "Could not reach server. Is Flask running?";
+            genBtn.disabled = false;
+        }
+    }
+
+    // ── LOCK / UNLOCK ──
+
+    async function toggleLock() {
+        if (!currentCardId) return;
+        const endpoint = isLocked ? 'unlock' : 'lock';
+
+        const res = await fetch(`${API}/card/${currentCardId}/${endpoint}`, { method: "POST" });
+        const data = await res.json();
+
+        if (data.success) {
+            isLocked = !isLocked;
+            const lockBtn = document.getElementById('lockBtn');
+            const card = document.getElementById('cardPreview');
+            const detailsList = document.getElementById('cardDetailsList');
+
+            if (isLocked) {
+                lockBtn.textContent = '🔓 Unlock Card';
+                card.classList.add('locked');
+                setCardStatus('locked');
+                detailsList.style.display = 'none';
+                document.getElementById('cardNumber').textContent = '•••• •••• •••• ••••';
+                document.getElementById('cardCvv').textContent = '•••';
+            } else {
+                lockBtn.textContent = '🔒 Lock Card';
+                card.classList.remove('locked');
+                setCardStatus('active');
+                detailsList.style.display = 'block';
+                document.getElementById('cardNumber').textContent = window._maskedNum;
+                document.getElementById('cardCvv').textContent = window._cvv;
+            }
+        }
+    }
+
+    // ── BURN CARD ──
+
+    async function burnCard() {
+        if (!currentCardId) return;
+        if (!confirm("Are you sure? This will permanently destroy your card.")) return;
+
+        const res = await fetch(`${API}/card/${currentCardId}/burn`, { method: "POST" });
+        const data = await res.json();
+
+        if (data.success) {
+            const card = document.getElementById('cardPreview');
+            card.classList.add('burned');
+            card.classList.remove('locked');
+
+            document.getElementById('cardNumber').textContent = '•••• •••• •••• ••••';
+            document.getElementById('cardExpiry').textContent = 'MM/YYYY';
+            document.getElementById('cardCvv').textContent = '•••';
+            document.getElementById('cardHolder').textContent = '— — —';
+            document.getElementById('cardDetailsList').style.display = 'none';
+            document.getElementById('cardActions').style.display = 'none';
+
+            setCardStatus('burned');
+            clearCardState();
+            currentCardId = null;
+
+            const remaining = data.remaining_balance;
+            const msg = document.getElementById('status-msg');
+
+            if (remaining && remaining > 0) {
+                msg.className = 'status-msg';
+                msg.innerHTML = `Card destroyed. You have <strong>USD ${remaining}</strong> remaining.
+                    <a href="#" onclick="resetWithBalance(${remaining})"
+                    style="color: var(--gold); text-decoration: underline; margin-left: 4px;">
+                    Create a new card →
+                    </a>`;
+            } else {
+                msg.textContent = "Card destroyed. Your balance has been fully used.";
+            }
+        }
+    }
+
+    // ── RESET WITH REMAINING BALANCE ──
+
+    function resetWithBalance(remaining) {
+        const card = document.getElementById('cardPreview');
+        card.classList.remove('burned', 'locked');
+
+        document.getElementById('cardStatusBadge').className = 'card-status-badge';
+        document.getElementById('amount').value = remaining;
+        document.getElementById('payBtn').disabled = false;
+        document.getElementById('generateBtn').style.display = 'none';
+        document.getElementById('status-msg').textContent = '';
+
+        document.querySelector('.panel-left').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── HELPERS ──
+
+    function setCardStatus(status) {
+        const badge = document.getElementById('cardStatusBadge');
+        const text = document.getElementById('cardStatusText');
+        badge.className = `card-status-badge ${status}`;
+        const labels = { active: '● Active', locked: '● Locked', burned: '● Destroyed' };
+        text.textContent = labels[status] || status;
+    }
+
+    function formatExpiry(w) {
+        return { '1h': '1 Hour', '24h': '24 Hours', '7d': '7 Days', '30d': '30 Days' }[w] || w;
+    }
+
+    function copyText(id) {
+        const text = document.getElementById(id).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            event.target.textContent = 'Copied!';
+            setTimeout(() => event.target.textContent = 'Copy', 2000);
+        });
+    }
+
+    // ── RESTORE ON LOAD ──
+    window.addEventListener('load', restoreCardState);
+</script>
+</body>
+</html>
