@@ -506,6 +506,105 @@
         .hero p      { animation-delay: 0.25s; }
         .hero-cta    { animation-delay: 0.35s; }
         .hero-right  { animation: fadeUp 0.8s 0.2s ease both; }
+        @media (max-width: 768px) {
+    nav {
+        padding: 20px 24px;
+    }
+
+    .nav-links a:not(.btn-primary) {
+        display: none;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 24px 40px;
+        min-height: auto;
+        gap: 48px;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+        letter-spacing: -1px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero-right {
+        order: -1;
+    }
+
+    .card-visual {
+        width: 100%;
+        transform: none;
+    }
+
+    .float-badge {
+        bottom: -12px;
+        left: 12px;
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+
+    .how {
+        padding: 60px 24px;
+    }
+
+    .how h2 {
+        font-size: 30px;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+
+    .step:first-child { border-radius: 12px 12px 0 0; }
+    .step:last-child { border-radius: 0 0 12px 12px; }
+
+    .diff {
+        padding: 60px 24px;
+    }
+
+    .diff-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .diff h2 {
+        font-size: 30px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .cta {
+        padding: 60px 24px;
+    }
+
+    .cta h2 {
+        font-size: 36px;
+    }
+
+    footer {
+        padding: 24px;
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+}
     </style>
 </head>
 <body>

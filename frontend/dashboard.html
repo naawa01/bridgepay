@@ -477,6 +477,38 @@
             border-color: var(--gold);
             background: rgba(61, 43, 31, 0.9);
         }
+        @media (max-width: 768px) {
+    nav {
+        padding: 20px 24px;
+    }
+
+    main {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+        gap: 40px;
+    }
+
+    .panel-left h2 {
+        font-size: 26px;
+    }
+
+    .panel-right {
+        padding-top: 0;
+    }
+
+    .card-number {
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+
+    .card-preview {
+        padding: 20px 24px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+}
     </style>
 </head>
 <body>
@@ -616,7 +648,7 @@
 </main>
 
 <script>
-    const API = "http://127.0.0.1:5000/api";
+const API = window.location.origin + "/api";
     let currentCardId = null;
     let isLocked = false;
 
