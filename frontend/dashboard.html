@@ -14,8 +14,8 @@
 <nav>
     <div class="logo">Bridge<span>Pay</span></div>
     <div style="display:flex; align-items:center; gap:16px;">
-        <span id="navGreeting" style="font-size:0.9rem; color:var(--text-muted);"></span>
-        <a href="/" class="btn-outline">← Home</a>
+        <span id="navGreeting" style="font-size:0.9rem; color:var(--sand);"></span>
+        <button onclick="logout()" class="btn-outline">Log Out</button>
     </div>
 </nav>
 
@@ -455,6 +455,12 @@ const API = window.location.origin + "/api";
             }
         } catch (e) {}
     }
+       // ── LOGOUT ──
+    async function logout() {
+        if (!confirm('Are you sure you want to log out?')) return;
+        await fetch('/auth/logout', { method: 'POST' });
+        window.location.href = '/';
+    } 
 
     // ── RESTORE ON LOAD ──
     window.addEventListener('load', () => {

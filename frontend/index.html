@@ -15,8 +15,10 @@
     <div class="nav-links">
         <a href="#how">How it works</a>
         <a href="#why">Why BridgePay</a>
-        <a href="/login">Log In</a>
-        <a href="/signup" class="btn-primary">Sign Up</a>
+        <div id="authNav">
+            <a href="/login">Log In</a>
+            <a href="/signup" class="btn-primary">Sign Up</a>
+        </div>
     </div>
 </nav>
 
@@ -164,6 +166,28 @@
     <p>© 2026 BridgePay. Built for Africa, by Africa.</p>
     <p>Powered by Mobile Money</p>
 </footer>
+<script>
+    async function checkAuth() {
+        try {
+            const res = await fetch('/auth/me');
+            const data = await res.json();
+            if (data.success && data.user) {
+                document.getElementById('authNav').innerHTML = `
+                    <a href="/dashboard">Dashboard</a>
+                    <button onclick="logout()" class="btn-primary">Log Out</button>
+                `;
+            }
+        } catch (e) {}
+    }
+
+    async function logout() {
+        if (!confirm('Are you sure you want to log out?')) return;
+        await fetch('/auth/logout', { method: 'POST' });
+        window.location.href = '/';
+    }
+
+    window.addEventListener('load', checkAuth);
+</script>
 
 </body>
 </html>
