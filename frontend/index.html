@@ -6,609 +6,10 @@
     <title>BridgePay — Shop Global, Pay Local</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --clay:      #C1440E;
-            --gold:      #D4A853;
-            --sand:      #E8D5B0;
-            --bark:      #3D2B1F;
-            --soil:      #6B3F2A;
-            --harmattan: #F5ECD7;
-            --dusk:      #1C1109;
-            --moss:      #4A6741;
-            --cream:     #FAF4E8;
-        }
- 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
- 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--dusk);
-            color: var(--sand);
-            overflow-x: hidden;
-        }
- 
-        /* NAV */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 28px 56px;
-            border-bottom: 1px solid rgba(212, 168, 83, 0.12);
-        }
- 
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--sand);
-            letter-spacing: -0.5px;
-        }
- 
-        .logo span { color: var(--gold); }
- 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
- 
-        .nav-links a {
-            color: var(--sand);
-            text-decoration: none;
-            font-size: 15px;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
- 
-        .nav-links a:hover { opacity: 1; }
- 
-        .btn-primary {
-            background: var(--clay);
-            color: var(--cream);
-            padding: 13px 28px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            border: none;
-            cursor: pointer;
-            display: inline-block;
-            transition: background 0.2s, transform 0.1s;
-        }
- 
-        .btn-primary:hover {
-            background: #A8380A;
-            transform: translateY(-1px);
-        }
- 
-        .btn-secondary {
-            border: 1px solid rgba(212, 168, 83, 0.35);
-            color: var(--gold);
-            padding: 13px 28px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            display: inline-block;
-            transition: all 0.2s;
-        }
- 
-        .btn-secondary:hover {
-            border-color: var(--gold);
-            background: rgba(212, 168, 83, 0.08);
-        }
- 
-        /* HERO */
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-            padding: 100px 56px 80px;
-            min-height: 88vh;
-        }
- 
-        .hero-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(212, 168, 83, 0.1);
-            border: 1px solid rgba(212, 168, 83, 0.22);
-            color: var(--gold);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 28px;
-        }
- 
-        .hero-tag::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--gold);
-            border-radius: 50%;
-        }
- 
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 66px;
-            font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: -2px;
-            color: var(--harmattan);
-            margin-bottom: 28px;
-        }
- 
-        .hero h1 em {
-            font-style: normal;
-            color: var(--gold);
-        }
- 
-        .hero p {
-            font-size: 17px;
-            color: rgba(232, 213, 176, 0.62);
-            line-height: 1.75;
-            margin-bottom: 44px;
-            max-width: 480px;
-        }
- 
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
- 
-        /* CARD VISUAL */
-        .hero-right {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
- 
-        .card-wrap {
-            position: relative;
-        }
- 
-        .card-visual {
-            width: 380px;
-            aspect-ratio: 1.586;
-            background: linear-gradient(135deg, var(--soil) 0%, var(--bark) 60%, #0D0703 100%);
-            border-radius: 18px;
-            padding: 28px 32px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow:
-                0 40px 80px rgba(0,0,0,0.5),
-                0 0 0 1px rgba(212, 168, 83, 0.2),
-                inset 0 1px 0 rgba(212, 168, 83, 0.15);
-            transform: rotate(-4deg);
-            transition: transform 0.4s ease;
-            position: relative;
-        }
- 
-        .card-visual:hover { transform: rotate(0deg) scale(1.02); }
- 
-        .card-visual::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 32px; right: 32px;
-            height: 3px;
-            background: repeating-linear-gradient(
-                90deg,
-                var(--clay) 0px, var(--clay) 16px,
-                var(--gold) 16px, var(--gold) 32px,
-                var(--moss) 32px, var(--moss) 48px,
-                var(--bark) 48px, var(--bark) 64px
-            );
-            border-radius: 0 0 4px 4px;
-        }
- 
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-        }
- 
-        .card-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--sand);
-        }
- 
-        .card-logo span { color: var(--gold); }
- 
-        .card-chip {
-            width: 38px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--gold), #B8943D);
-            border-radius: 5px;
-        }
- 
-        .card-number {
-            font-size: 18px;
-            letter-spacing: 3px;
-            color: var(--sand);
-            font-weight: 500;
-        }
- 
-        .card-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
- 
-        .card-detail { display: flex; flex-direction: column; }
- 
-        .card-label {
-            font-size: 9px;
-            color: rgba(232, 213, 176, 0.45);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
- 
-        .card-value {
-            font-size: 13px;
-            color: var(--sand);
-            font-weight: 500;
-        }
- 
-        .card-visa {
-            font-size: 22px;
-            font-weight: 800;
-            font-style: italic;
-            color: var(--sand);
-        }
- 
-        .float-badge {
-            position: absolute;
-            bottom: -16px;
-            left: -24px;
-            background: var(--clay);
-            color: var(--cream);
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 8px 24px rgba(193, 68, 14, 0.35);
-            white-space: nowrap;
-        }
- 
-        /* HOW IT WORKS */
-        .how {
-            padding: 100px 56px;
-            border-top: 1px solid rgba(212, 168, 83, 0.1);
-        }
- 
-        .section-label {
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
- 
-        .how h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--harmattan);
-            margin-bottom: 60px;
-            max-width: 460px;
-            line-height: 1.2;
-        }
- 
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-        }
- 
-        .step {
-            background: rgba(61, 43, 31, 0.35);
-            padding: 40px 36px;
-            border: 1px solid rgba(212, 168, 83, 0.1);
-            transition: background 0.2s, border-color 0.2s;
-        }
- 
-        .step:first-child { border-radius: 12px 0 0 12px; }
-        .step:last-child { border-radius: 0 12px 12px 0; }
- 
-        .step:hover {
-            background: rgba(61, 43, 31, 0.6);
-            border-color: rgba(212, 168, 83, 0.2);
-        }
- 
-        .step-icon {
-            font-size: 28px;
-            margin-bottom: 16px;
-        }
- 
-        .step-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 44px;
-            font-weight: 800;
-            color: rgba(212, 168, 83, 0.1);
-            line-height: 1;
-            margin-bottom: 16px;
-        }
- 
-        .step h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--harmattan);
-            margin-bottom: 10px;
-        }
- 
-        .step p {
-            color: rgba(232, 213, 176, 0.55);
-            line-height: 1.7;
-            font-size: 15px;
-        }
- 
-        /* DIFFERENTIATORS */
-        .diff {
-            padding: 100px 56px;
-            background: rgba(61, 43, 31, 0.18);
-            border-top: 1px solid rgba(212, 168, 83, 0.1);
-        }
- 
-        .diff-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: start;
-        }
- 
-        .diff h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--harmattan);
-            line-height: 1.15;
-            margin-bottom: 16px;
-        }
- 
-        .diff-intro {
-            color: rgba(232, 213, 176, 0.6);
-            font-size: 16px;
-            line-height: 1.75;
-            margin-bottom: 40px;
-        }
- 
-        .diff-items {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
- 
-        .diff-item {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-            padding: 20px;
-            background: rgba(61, 43, 31, 0.4);
-            border: 1px solid rgba(212, 168, 83, 0.1);
-            border-radius: 10px;
-            transition: border-color 0.2s;
-        }
- 
-        .diff-item:hover { border-color: rgba(212, 168, 83, 0.22); }
- 
-        .diff-icon {
-            font-size: 22px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
- 
-        .diff-text h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--harmattan);
-            margin-bottom: 4px;
-        }
- 
-        .diff-text p {
-            font-size: 13px;
-            color: rgba(232, 213, 176, 0.5);
-            line-height: 1.6;
-        }
- 
-        /* STATS */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
- 
-        .stat {
-            padding: 24px;
-            background: rgba(61, 43, 31, 0.5);
-            border: 1px solid rgba(212, 168, 83, 0.1);
-            border-radius: 10px;
-        }
- 
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 34px;
-            font-weight: 700;
-            color: var(--gold);
-            line-height: 1;
-            margin-bottom: 6px;
-        }
- 
-        .stat-label {
-            font-size: 13px;
-            color: rgba(232, 213, 176, 0.5);
-            line-height: 1.4;
-        }
- 
-        /* CTA */
-        .cta {
-            padding: 100px 56px;
-            text-align: center;
-            border-top: 1px solid rgba(212, 168, 83, 0.1);
-        }
- 
-        .cta h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 52px;
-            font-weight: 800;
-            color: var(--harmattan);
-            margin-bottom: 16px;
-            line-height: 1.1;
-        }
- 
-        .cta p {
-            color: rgba(232, 213, 176, 0.55);
-            font-size: 17px;
-            margin-bottom: 40px;
-        }
- 
-        /* FOOTER */
-        footer {
-            padding: 28px 56px;
-            border-top: 1px solid rgba(212, 168, 83, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
- 
-        .footer-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: rgba(232, 213, 176, 0.35);
-        }
- 
-        .footer-logo span { color: rgba(212, 168, 83, 0.5); }
- 
-        footer p {
-            color: rgba(232, 213, 176, 0.3);
-            font-size: 13px;
-        }
- 
-        /* Animations */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
- 
-        .hero-left > * { animation: fadeUp 0.6s ease both; }
-        .hero-tag    { animation-delay: 0.05s; }
-        .hero h1     { animation-delay: 0.15s; }
-        .hero p      { animation-delay: 0.25s; }
-        .hero-cta    { animation-delay: 0.35s; }
-        .hero-right  { animation: fadeUp 0.8s 0.2s ease both; }
-        @media (max-width: 768px) {
-    nav {
-        padding: 20px 24px;
-    }
- 
-    .nav-links a:not(.btn-primary) {
-        display: none;
-    }
- 
-    .hero {
-        grid-template-columns: 1fr;
-        padding: 60px 24px 40px;
-        min-height: auto;
-        gap: 48px;
-    }
- 
-    .hero h1 {
-        font-size: 42px;
-        letter-spacing: -1px;
-    }
- 
-    .hero p {
-        font-size: 15px;
-    }
- 
-    .hero-cta {
-        flex-direction: column;
-        align-items: flex-start;
-    }
- 
-    .btn-primary, .btn-secondary {
-        width: 100%;
-        text-align: center;
-    }
- 
-    .hero-right {
-        order: -1;
-    }
- 
-    .card-visual {
-        width: 100%;
-        transform: none;
-    }
- 
-    .float-badge {
-        bottom: -12px;
-        left: 12px;
-        font-size: 12px;
-        padding: 8px 14px;
-    }
- 
-    .how {
-        padding: 60px 24px;
-    }
- 
-    .how h2 {
-        font-size: 30px;
-    }
- 
-    .steps {
-        grid-template-columns: 1fr;
-        gap: 2px;
-    }
- 
-    .step:first-child { border-radius: 12px 12px 0 0; }
-    .step:last-child { border-radius: 0 0 12px 12px; }
- 
-    .diff {
-        padding: 60px 24px;
-    }
- 
-    .diff-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
- 
-    .diff h2 {
-        font-size: 30px;
-    }
- 
-    .stats-grid {
-        grid-template-columns: 1fr 1fr;
-    }
- 
-    .cta {
-        padding: 60px 24px;
-    }
- 
-    .cta h2 {
-        font-size: 36px;
-    }
- 
-    footer {
-        padding: 24px;
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-    }
-}
-    </style>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
- 
+
 <nav>
     <div class="logo">Bridge<span>Pay</span></div>
     <div class="nav-links">
@@ -618,7 +19,7 @@
         <a href="/signup" class="btn-primary">Sign Up</a>
     </div>
 </nav>
- 
+
 <!-- HERO -->
 <section class="hero">
     <div class="hero-left">
@@ -630,7 +31,7 @@
             <a href="#how" class="btn-secondary">See how it works</a>
         </div>
     </div>
- 
+
     <div class="hero-right">
         <div class="card-wrap">
             <div class="card-visual">
@@ -655,7 +56,7 @@
         </div>
     </div>
 </section>
- 
+
 <!-- HOW IT WORKS -->
 <section class="how" id="how">
     <div class="section-label">The Process</div>
@@ -681,7 +82,7 @@
         </div>
     </div>
 </section>
- 
+
 <!-- WHY BRIDGEPAY -->
 <section class="diff" id="why">
     <div class="diff-grid">
@@ -720,7 +121,7 @@
                 </div>
             </div>
         </div>
- 
+
         <div class="stats-grid">
             <div class="stat">
                 <div class="stat-number">17M+</div>
@@ -749,20 +150,20 @@
         </div>
     </div>
 </section>
- 
+
 <!-- CTA -->
 <section class="cta">
     <h2>Your MoMo.<br>The whole world.</h2>
     <p>Join West Africans who are done being locked out of global commerce.</p>
     <a href="/signup" class="btn-primary">Create Your Free Card</a>
 </section>
- 
+
 <!-- FOOTER -->
 <footer>
     <div class="footer-logo">Bridge<span>Pay</span></div>
     <p>© 2026 BridgePay. Built for Africa, by Africa.</p>
     <p>Powered by Mobile Money</p>
 </footer>
- 
+
 </body>
 </html>

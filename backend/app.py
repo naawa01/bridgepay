@@ -41,12 +41,15 @@ def dashboard():
 
 @app.route('/login')
 def login_page():
+    if current_user.is_authenticated:
+        return redirect('/dashboard')
     return send_from_directory(FRONTEND_DIR, 'login.html')
 
 @app.route('/signup')
 def signup_page():
+    if current_user.is_authenticated:
+        return redirect('/dashboard')
     return send_from_directory(FRONTEND_DIR, 'signup.html')
-
 @app.route('/<path:filename>')
 def static_files(filename):
     return send_from_directory(FRONTEND_DIR, filename)
