@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BridgePay — Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<nav>
+    <a href="/" class="logo">Bridge<span>Pay</span></a>
+    <div style="display:flex; align-items:center; gap:16px;">
+        <a href="/dashboard" class="btn-outline">Dashboard</a>
+        <button onclick="logout()" class="btn-outline">Log Out</button>
+    </div>
+</nav>
+
+<div style="max-width:700px; margin:0 auto; padding:56px 24px;">
+
+    <h2 style="font-family:'Playfair Display',serif; font-size:34px; color:var(--harmattan); margin-bottom:6px;">Your Profile</h2>
+    <p style="color:rgba(232,213,176,0.5); margin-bottom:40px;">Your BridgePay account details and activity.</p>
+
+    <!-- STATS GRID -->
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:40px;" id="statsGrid">
+        <div class="stat-card" id="statTotalCards">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Cards Created</div>
+        </div>
+        <div class="stat-card" id="statActiveCards">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Active Cards</div>
+        </div>
+        <div class="stat-card" id="statTotalUsd">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Total Loaded (USD)</div>
+        </div>
+        <div class="stat-card" id="statDays">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Days as Member</div>
+        </div>
+        <div class="stat-card" id="statTotalGhs">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Total Loaded (GHS)</div>
+        </div>
+        <div class="stat-card" id="statRemaining">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Remaining Balance (USD)</div>
+        </div>
+        <div class="stat-card" id="statLocked">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Locked Cards</div>
+        </div>
+        <div class="stat-card" id="statBurned">
+            <div class="stat-number">—</div>
+            <div class="stat-label">Burned Cards</div>
+        </div>
+    </div>
+
+    <!-- ACCOUNT DETAILS -->
+    <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="detail-row" style="background:rgba(61,43,31,0.4); border:1px solid rgba(212,168,83,0.1); border-radius:10px; padding:16px 20px;">
+            <span class="detail-row-label">Full Name</span>
+            <span class="detail-row-value" id="profileName">—</span>
+        </div>
+        <div class="detail-row" style="background:rgba(61,43,31,0.4); border:1px solid rgba(212,168,83,0.1); border-radius:10px; padding:16px 20px;">
+            <span class="detail-row-label">Phone Number</span>
+            <span class="detail-row-value" id="profilePhone">—</span>
+        </div>
+        <div class="detail-row" style="background:rgba(61,43,31,0.4); border:1px solid rgba(212,168,83,0.1); border-radius:10px; padding:16px 20px;">
+            <span class="detail-row-label">Email</span>
+            <span class="detail-row-value" id="profileEmail">—</span>
+        </div>
+        <div class="detail-row" style="background:rgba(61,43,31,0.4); border:1px solid rgba(212,168,83,0.1); border-radius:10px; padding:16px 20px;">
+            <span class="detail-row-label">Member Since</span>
+            <span class="detail-row-value" id="profileJoined">—</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    async function loadProfile() {
+        try {
+            const res = await fetch('/auth/me');
+            const data = await res.json();
+            if (data.success && data.user) {
+                const u = data.user;
+                document.getElementById('profileName').textContent  = u.full_name || '—';
+                document.getElementById('profilePhone').textContent = u.phone || '—';
+                document.getElementById('profileEmail').textContent = u.email || 'Not provided';
+                document.getElementById('profileJoined').textContent = u.created_at
+                    ? new Date(u.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })
+                    : '—';
+            } else {
+                window.location.href = '/login';
+            }
+        } catch (e) {
+            window.location.href = '/login';
+        }
+    }
+
+    async function loadStats() {
+        try {
+            const res = await fetch('/auth/stats');
+            const data = await res.json();
+            if (data.success) {
+                const s = data.stats;
+                document.getElementById('statTotalCards').querySelector('.stat-number').textContent = s.total_cards;
+                document.getElementById('statActiveCards').querySelector('.stat-number').textContent = s.active_cards;
+                document.getElementById('statTotalUsd').querySelector('.stat-number').textContent = `$${s.total_loaded_usd}`;
+                document.getElementById('statDays').querySelector('.stat-number').textContent = s.days_member;
+                document.getElementById('statTotalGhs').querySelector('.stat-number').textContent = `₵${s.total_loaded_ghs}`;
+                document.getElementById('statRemaining').querySelector('.stat-number').textContent = `$${s.total_remaining_usd}`;
+                document.getElementById('statLocked').querySelector('.stat-number').textContent = s.locked_cards;
+                document.getElementById('statBurned').querySelector('.stat-number').textContent = s.burned_cards;
+            }
+        } catch (e) {}
+    }
+
+    async function logout() {
+        if (!confirm('Are you sure you want to log out?')) return;
+        await fetch('/auth/logout', { method: 'POST' });
+        window.location.href = '/';
+    }
+
+    window.addEventListener('load', () => {
+        loadProfile();
+        loadStats();
+    });
+</script>
+</body>
+</html>

@@ -33,6 +33,12 @@ FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend')
 def index():
     return send_from_directory(FRONTEND_DIR, 'index.html')
 
+@app.route('/profile')
+def profile():
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    return send_from_directory(FRONTEND_DIR, 'profile.html')
+
 @app.route('/dashboard')
 def dashboard():
     if not current_user.is_authenticated:
@@ -57,6 +63,10 @@ def static_files(filename):
 with app.app_context():
     db.drop_all()
     db.create_all()
+
+@app.errorhandler(404)
+def not_found(e):
+    return send_from_directory(FRONTEND_DIR, '404.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'])

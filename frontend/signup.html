@@ -56,60 +56,103 @@
 <script>
     const API = window.location.origin;
 
-    async function signup() {
-        const fullName = document.getElementById('fullName').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const msg = document.getElementById('status-msg');
-        const btn = document.getElementById('signupBtn');
+   async function signup() {
+    const fullName = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const msg = document.getElementById('status-msg');
+    const btn = document.getElementById('signupBtn');
 
-        if (!phone || !password) {
-            msg.className = 'status-msg error';
-            msg.textContent = "Phone number and password are required.";
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            msg.className = 'status-msg error';
-            msg.textContent = "Passwords do not match.";
-            return;
-        }
-
-        if (password.length < 6) {
-            msg.className = 'status-msg error';
-            msg.textContent = "Password must be at least 6 characters.";
-            return;
-        }
-
-        msg.className = 'status-msg';
-        msg.textContent = "Creating your account...";
-        btn.disabled = true;
-
-        try {
-            const res = await fetch(`${API}/auth/signup`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ full_name: fullName, phone, email, password })
-            });
-
-            const data = await res.json();
-
-            if (data.success) {
-                msg.textContent = "Account created! Redirecting...";
-                setTimeout(() => window.location.href = '/dashboard', 1000);
-            } else {
-                msg.className = 'status-msg error';
-                msg.textContent = data.error || "Signup failed. Please try again.";
-                btn.disabled = false;
-            }
-        } catch {
-            msg.className = 'status-msg error';
-            msg.textContent = "Could not reach server. Is Flask running?";
-            btn.disabled = false;
-        }
+    // ── VALIDATION ──
+    if (!fullName) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Please enter your full name.";
+        return;
     }
+
+    if (!phone) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Phone number is required.";
+        return;
+    }
+
+    const phoneClean = phone.replace(/\s+/g, '');
+    if (!/^\+?[\d]{9,13}$/.test(phoneClean)) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Enter a valid phone number (e.g. +233241234567).";
+        return;
+    }
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Enter a valid email address.";
+        return;
+    }
+
+    if (!password) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Password is required.";
+        return;
+    }
+
+    if (password.length < 8) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Password must be at least 8 characters.";
+        return;
+    }
+
+    if (!/[A-Z]/.test(password)) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Password must contain at least one uppercase letter.";
+        return;
+    }
+
+    if (!/[0-9]/.test(password)) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Password must contain at least one number.";
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        msg.className = 'status-msg error';
+        msg.textContent = "Passwords do not match.";
+        return;
+    }
+
+    // ── SUBMIT ──
+    msg.className = 'status-msg';
+    msg.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Please wait...';
+
+    try {
+        const res = await fetch(`${API}/auth/signup`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ full_name: fullName, phone, email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            btn.textContent = '✓ Account created!';
+            msg.textContent = "Welcome to BridgePay. Redirecting...";
+            setTimeout(() => window.location.href = '/', 1000);
+        } else {
+            msg.className = 'status-msg error';
+            msg.textContent = data.error || "Signup failed. Please try again.";
+            btn.disabled = false;
+            btn.textContent = 'Create Account';
+        }
+    } catch {
+        msg.className = 'status-msg error';
+        msg.textContent = "Could not reach server. Is Flask running?";
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+    }
+}
 </script>
 </body>
 </html>
