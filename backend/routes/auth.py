@@ -60,3 +60,38 @@ def logout():
 @login_required
 def me():
     return jsonify({"success": True, "user": current_user.to_dict()})
+@auth_bp.route('/stats', methods=['GET'])
+@login_required
+def stats():
+    from models import Card
+    
+    cards = Card.query.filter_by(user_id=current_user.id).all()
+    
+    total_cards = len(cards)
+    active_cards = sum(1 for c in cards if c.status == 'active')
+    locked_cards = sum(1 for c in cards if c.locked)
+    burned_cards = sum(1 for c in cards if c.status == 'burned')
+    total_loaded_ghs = sum(c.amount * 14.5 for c in cards)  # approx GHS conversion
+    total_loaded_usd = sum(c.amount for c in cards)
+    total_remaining_usd = sum(c.remaining_balance for c in cards if c.status == 'active')
+
+    # member for X days
+    try:
+        joined = datetime.fromisoformat(current_user.created_at)
+        days_member = (datetime.now() - joined).days
+    except:
+        days_member = 0
+
+    return jsonify({
+        "success": True,
+        "stats": {
+            "total_cards": total_cards,
+            "active_cards": active_cards,
+            "locked_cards": locked_cards,
+            "burned_cards": burned_cards,
+            "total_loaded_usd": round(total_loaded_usd, 2),
+            "total_loaded_ghs": round(total_loaded_ghs, 2),
+            "total_remaining_usd": round(total_remaining_usd, 2),
+            "days_member": days_member
+        }
+    })

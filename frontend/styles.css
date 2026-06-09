@@ -444,6 +444,34 @@ nav {
 
 .cta p { color: rgba(232, 213, 176, 0.55); font-size: 17px; margin-bottom: 40px; }
 
+/* ── STAT CARDS ── */
+.stat-card {
+    padding: 20px;
+    background: rgba(61, 43, 31, 0.5);
+    border: 1px solid rgba(212, 168, 83, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.stat-card:hover { border-color: rgba(212, 168, 83, 0.25); }
+
+.stat-card .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.stat-card .stat-label {
+    font-size: 12px;
+    color: rgba(232, 213, 176, 0.5);
+    line-height: 1.4;
+}
+
+
 /* ── FOOTER ── */
 footer {
     padding: 28px 56px;
